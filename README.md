@@ -1,4 +1,4 @@
-# shopify
+# watchX
 
 A new Flutter project.
 
