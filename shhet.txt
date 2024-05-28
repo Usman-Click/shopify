@@ -1,0 +1,6 @@
+indexedStack - saves the state of a wigdet b4 indexing to the next wigdet
+so that when u index back to a widget you'll see the samwe state as b4
+
+when ever you're referring to a class, you should refer to an instance of it (ie: you should call its constructor)
+
+expanded -> layputBuilder -> fixedSize

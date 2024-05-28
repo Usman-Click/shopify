@@ -1,19 +1,18 @@
 import 'dart:convert';
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:http/http.dart' as http;
-import 'package:shopify/pages/movie_page.dart';
-
-class MainPage extends StatefulWidget {
-  const MainPage({super.key});
+import 'package:shopify/pages/movie.dart';
+class Movies extends StatefulWidget {
+  const Movies({super.key});
 
   @override
-  State<MainPage> createState() => _MainPageState();
+  State<Movies> createState() => _MoviesState();
 }
 
-class _MainPageState extends State<MainPage> {
+class _MoviesState extends State<Movies> {
+
   final String baseUrl =
       'https://api.themoviedb.org/3/trending/movie/day?language=en-US';
   final String seriesUrl = "https://api.themoviedb.org/3/tv/popular";
@@ -62,32 +61,7 @@ class _MainPageState extends State<MainPage> {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        appBar: AppBar(
-          title: const Text("Home"),
-          actions: [
-            IconButton(onPressed: () {}, icon: const Icon(Icons.search)),
-            const SizedBox(
-              width: 10,
-            ),
-            IconButton(
-              onPressed: () {},
-              icon: ClipOval(
-                child: Image.network(
-                  'https://image.tmdb.org/t/p/w300/j3Z3XktmWB1VhsS8iXNcrR86PXi.jpg',
-                  width: 35,
-                  height: 35,
-                  fit: BoxFit.cover,
-                ),
-              ),
-            ),
-            const SizedBox(
-              width: 10,
-            ),
-          ],
-        ),
-        body: SingleChildScrollView(
+    return  SingleChildScrollView(
           child: Padding(
               padding: const EdgeInsets.all(10),
               child: Column(
@@ -355,8 +329,6 @@ class _MainPageState extends State<MainPage> {
                       }),
                 ],
               )),
-        ),
-      ),
-    );
+        );
   }
 }
