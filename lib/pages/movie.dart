@@ -1,12 +1,12 @@
 import 'dart:convert';
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:http/http.dart' as http;
+import 'package:shopify/keys.dart';
 
 class MoviePage extends StatefulWidget {
   final String imgUrl, name, overview, releaseData, actorsImgUrl;
+  final int id;
   final List<String> contentList;
   const MoviePage(
       {super.key,
@@ -15,29 +15,53 @@ class MoviePage extends StatefulWidget {
       required this.overview,
       required this.releaseData,
       required this.actorsImgUrl,
-      required this.contentList});
+      required this.contentList, required this.id});
 
   @override
   State<MoviePage> createState() => _MoviePageState();
 }
 
 class _MoviePageState extends State<MoviePage> {
+
   bool isfav = false;
-  final String imgBaseUrl = 'https://image.tmdb.org/t/p/w500';
-  late Future<Map<String, dynamic>> Casts;
+
+  late Future<Map<String, dynamic>> casts;
+  late Future<Map<String, dynamic>> favourites;
+
+    final Map<String, String> headers = {
+    "accept": "application/json",
+    "content-type": "application/json",
+    "authorization": authKey,   
+  };
+
 
   @override
   void initState() {
     super.initState();
-    Casts = getCasts();
+    casts = getCasts();
   }
 
+
+void addToFavourites () async {
+
+  final Map<String, dynamic> body = {
+     "media_type": "movie",
+    "media_id": widget.id,
+    "favorite": true
+  };
+
+  final req = await http.post(Uri.parse(favBaseUrl), headers: headers, body: jsonEncode(body) );
+
+  if (req.statusCode != 201) {
+      throw("Error ${req.statusCode}");
+  }else{
+      throw("Sucess");
+  }
+
+
+}
   Future<Map<String, dynamic>> getCasts() async {
-    final Map<String, String> headers = {
-      "Authorization":
-          "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJhNjVjMWNlMWJjOTE2YTVmYzgyODEwYWM3NTllMjljZSIsInN1YiI6IjY2NGE2YzIxN2E0ZmJhOTBlZjc5NTg4YyIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ._fI7hQFdREpxGeGcA5JqPNNc_b1a31R3C6PLoyEHRdY"
-    };
-    final res = await http.get(
+       final res = await http.get(
         Uri.parse("https://api.themoviedb.org/3/trending/person/day"),
         headers: headers);
 
@@ -116,12 +140,18 @@ class _MoviePageState extends State<MoviePage> {
                           GestureDetector(
                             onTap: () {
                               setState(() {
-                                if (isfav) {
-                                  // TODO
-                                  isfav = false;
+                                if (!isfav) {
+                                  try{
+                                    addToFavourites();
+                                    ScaffoldMessenger.of(context)
+                                    .showSnackBar(const SnackBar(content: Text("Added")));
+                                  }catch(e){
+                                      print(e);
+                                  }                                  
+                                  isfav = true;
                                 } else {
                                   // TODO
-                                  isfav = true;
+                                  isfav = false;
                                 }
                               });
                             },
@@ -163,7 +193,7 @@ class _MoviePageState extends State<MoviePage> {
                     height: 5,
                   ),
                   FutureBuilder(
-                      future: Casts,
+                      future: casts,
                       builder: (context, snapshot) {
                         if (snapshot.connectionState ==
                             ConnectionState.waiting) {

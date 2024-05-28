@@ -19,7 +19,7 @@ class _MainPageState extends State<MainPage> {
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
-          title: const Text("Home"),
+          title: Text(currentPage == 0 ? "Home" : "Favourites"),
           actions: [
             IconButton(onPressed: () {}, icon: const Icon(Icons.search)),
             const SizedBox(
@@ -42,11 +42,13 @@ class _MainPageState extends State<MainPage> {
           ],
         ),
        
+        // body: pages[currentPage],
         body: IndexedStack(
           index: currentPage,
           children: pages,
         ),
 
+      // Bottom navigation bar
         bottomNavigationBar: BottomNavigationBar(
           currentIndex: currentPage,
           selectedFontSize: 0,

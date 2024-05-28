@@ -1,8 +1,8 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:http/http.dart' as http;
+import 'package:shopify/keys.dart';
 import 'package:shopify/pages/movie.dart';
 class Movies extends StatefulWidget {
   const Movies({super.key});
@@ -13,10 +13,6 @@ class Movies extends StatefulWidget {
 
 class _MoviesState extends State<Movies> {
 
-  final String baseUrl =
-      'https://api.themoviedb.org/3/trending/movie/day?language=en-US';
-  final String seriesUrl = "https://api.themoviedb.org/3/tv/popular";
-  final String imgBaseUrl = 'https://image.tmdb.org/t/p/w500';
   late Future<Map<String, dynamic>> trendingMovies;
 
   int selChip = 0;
@@ -138,6 +134,7 @@ class _MoviesState extends State<Movies> {
                                   Navigator.of(context).push(
                                       MaterialPageRoute(builder: (context) {
                                     return MoviePage(
+                                      id: trending["id"],
                                         imgUrl: imgBaseUrl +
                                             trending["poster_path"],
                                         actorsImgUrl:
@@ -210,6 +207,7 @@ class _MoviesState extends State<Movies> {
                                                     Navigator.of(context).push(MaterialPageRoute(
                                                       builder: (context){
                                                         return MoviePage(
+                                                          id:  data["results"][index]["id"],
                                                         imgUrl: imgBaseUrl +
                                                             data["results"][index]["poster_path"],
                                                         actorsImgUrl:
@@ -283,6 +281,8 @@ class _MoviesState extends State<Movies> {
                                                     Navigator.of(context).push(MaterialPageRoute(
                                                       builder: (context){
                                                         return MoviePage(
+                                                          id: data["results"][index]["id"],
+
                                                         imgUrl: imgBaseUrl +
                                                             data["results"][index]["poster_path"],
                                                         actorsImgUrl:
